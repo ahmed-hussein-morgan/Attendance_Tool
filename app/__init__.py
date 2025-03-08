@@ -59,8 +59,8 @@ def Create_app(config_name='development'):
     app.register_blueprint(tech_blueprint)
 
 
-    from .non_tech import non_tech as non_tech_blueprint
-    app.register_blueprint(non_tech_blueprint)
+    # from .non_tech import non_tech as non_tech_blueprint
+    # app.register_blueprint(non_tech_blueprint)
 
 
     # Create tables within the app context
