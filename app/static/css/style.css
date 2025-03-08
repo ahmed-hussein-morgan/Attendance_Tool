@@ -1,0 +1,51 @@
+/* Custom styles for the Attendance Tool */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    margin-top: auto;
+}
+
+/* Card styles */
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    font-weight: 500;
+}
+
+/* Table styles */
+.table th {
+    background-color: #f8f9fa;
+}
+
+/* Button styles */
+.btn {
+    border-radius: 4px;
+}
+
+/* Loading indicator */
+#loadingIndicator {
+    padding: 2rem 0;
+}
+
+/* DataTables customization */
+.dataTables_wrapper .dataTables_length, 
+.dataTables_wrapper .dataTables_filter, 
+.dataTables_wrapper .dataTables_info, 
+.dataTables_wrapper .dataTables_processing, 
+.dataTables_wrapper .dataTables_paginate {
+    margin-bottom: 1rem;
+}
+
+/* Navbar active link */
+.navbar-nav .nav-link.active {
+    font-weight: bold;
+    border-bottom: 2px solid white;
+}
