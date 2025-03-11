@@ -43,7 +43,7 @@ class Config():
 
             # cls.app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{user}:{password}@localhost/iticket_database_development"
             #cls.app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{os.environ.get('DEV_USER')}:{os.environ.get('DEV_PASS')}@localhost/{os.environ.get('FULL_TIMESHEET_DEV_DB')}"
-            cls.app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://dev_root_user_daemon:dev_root_password_daemon@localhost/timesheet_master_database_development"
+            cls.app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://dev_root_user_daemon:dev_root_password_daemon@localhost/attendance_tracking_database_development"
             #cls.app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://ahmed:ahmed@localhost/iticket_database_development"
 
             
