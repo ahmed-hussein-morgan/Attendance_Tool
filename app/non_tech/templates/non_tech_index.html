@@ -1,0 +1,45 @@
+{% extends "non_tech_base.html" %}
+
+{% block title %}Home - Attendance Tool{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">Welcome to Attendance Tool</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    This tool helps you connect to ZK attendance machines, retrieve attendance data, and manage employee records.
+                </p>
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="{{ url_for('non_tech.attendance') }}" class="btn btn-primary">
+                        <i class="fas fa-clock"></i> View Attendance
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('non_tech.attendance') }}" class="btn btn-outline-primary btn-block">
+                        Get Latest Attendance Data
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
