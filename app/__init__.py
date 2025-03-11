@@ -26,6 +26,7 @@ migrate = Migrate()
 #login_manager = LoginManager()
 
 
+
 # The login_view attribute of the LoginManager object sets the endpoint for the login page.
 
 # login_manager.login_view = 'auth.login'
@@ -73,7 +74,6 @@ def Create_app(config_name='development'):
         # to allow the new app user to login to the app and test all feature 
         # allowed only into the development phase
         create_daemon_tech_user()
-        app.run(debug=True)
 
     return app
 
