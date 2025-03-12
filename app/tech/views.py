@@ -66,22 +66,22 @@ def get_attendance_data():
     try:
         # Get data from all registered machines
         machines = ZKMachine.query.all()
-        logger.info(f"Found {len(machines)} registered machines.")
+        logger.info(f"Found {len(machines)} registered machines. at {datetime.now(cairo_tz)}")
         
         if not machines:
             # If no machines are registered, use the ones from config
-            logger.info("No machines registered. Using machines from config.")
+            logger.info(f"No machines registered. Using machines from config. at {datetime.now(cairo_tz)}")
             for machine_config in Config.ZK_MACHINES:
-                logger.info(f"Fetching data from machine: {machine_config['ip']}")
+                logger.info(f"Fetching data from machine: {machine_config['ip']} at {datetime.now(cairo_tz)}")
                 machine_data = ZKConnector.get_attendance_data(machine_config)
                 if machine_data:
-                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine_config['ip']}")
+                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine_config['ip']} at {datetime.now(cairo_tz)}")
                     ZKConnector.save_attendance_records(machine_data)
                 else:
-                    logger.error(f"Failed to fetch data from machine: {machine_config['ip']}")
+                    logger.error(f"Failed to fetch data from machine: {machine_config['ip']} at {datetime.now(cairo_tz)}")
         else:
             # Use registered machines
-            logger.info("Using registered machines.")
+            logger.info(f"Using registered machines. at {datetime.now(cairo_tz)}")
             for machine in machines:
                 machine_config = {
                     'ip': machine.ip,
@@ -89,17 +89,17 @@ def get_attendance_data():
                     'timeout': 50,
                     'name': machine.name
                 }
-                logger.info(f"Fetching data from machine: {machine.ip}")
+                logger.info(f"Fetching data from machine: {machine.ip} at {datetime.now(cairo_tz)}")
                 machine_data = ZKConnector.get_attendance_data(machine_config)
                 if machine_data:
-                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine.ip}")
+                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine.ip} at {datetime.now(cairo_tz)}")
                     ZKConnector.save_attendance_records(machine_data)
                 else:
-                    logger.error(f"Failed to fetch data from machine: {machine.ip}")
+                    logger.error(f"Failed to fetch data from machine: {machine.ip} at {datetime.now(cairo_tz)}")
         
         # Get combined data
         combined_data = ZKConnector.get_combined_attendance_data()
-        logger.info(f"Combined attendance data: {len(combined_data)} records.")
+        logger.info(f"Combined attendance data: {len(combined_data)} records. at {datetime.now(cairo_tz)}")
         
         return jsonify({
             'status': 'success',
@@ -107,7 +107,7 @@ def get_attendance_data():
             'count': len(combined_data)
         })
     except Exception as e:
-        logger.error(f"Error in get_attendance_data: {e}")
+        logger.error(f"Error in get_attendance_data: {e} at {datetime.now(cairo_tz)}")
         return jsonify({
             'status': 'error',
             'message': str(e)
@@ -542,7 +542,7 @@ def export_calculated_attendance():
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
     except Exception as e:
-        logger.error(f"Error exporting calculated attendance: {e}")
+        logger.error(f"Error exporting calculated attendance: {e} at {datetime.now(cairo_tz)}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
