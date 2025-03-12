@@ -3,7 +3,7 @@ from ..models import Employee, AttendanceRecord, ZKMachine, db
 from ..utils import ZKConnector, logger
 from config import Config
 from datetime import datetime
-from . import tech
+from . import non_tech
 import pandas as pd
 from io import BytesIO
 from datetime import timedelta
@@ -12,16 +12,16 @@ from pytz import timezone
 
 cairo_tz = timezone('Africa/Cairo')
 
-@tech.route('/')
+@non_tech.route('/index')
 def index():
     """
     Main page route
     """
-    machines = ZKMachine.query.all()
-    now = datetime.now()
-    return render_template('index.html', machines=machines, now=now)
 
-@tech.route('/machines')
+    now = datetime.now()
+    return render_template('non_tech_index.html', now=now)
+
+@non_tech.route('/machines')
 def list_machines():
     """
     List all registered ZK machines
@@ -30,7 +30,7 @@ def list_machines():
     now = datetime.now()
     return render_template('machines.html', machines=machines, now=now)
 
-@tech.route('/machines/add', methods=['GET', 'POST'])
+@non_tech.route('/machines/add', methods=['GET', 'POST'])
 def add_machine():
     """
     Add a new ZK machine
@@ -45,12 +45,12 @@ def add_machine():
         db.session.commit()
         
         flash(f'Machine {name} added successfully!', 'success')
-        return redirect(url_for('tech.list_machines'))
+        return redirect(url_for('non_tech.list_machines'))
     
     now = datetime.now()
     return render_template('add_machine.html', now=now)
 
-@tech.route('/attendance')
+@non_tech.route('/attendance')
 def attendance():
     """
     View attendance records
@@ -58,7 +58,7 @@ def attendance():
     now = datetime.now()
     return render_template('attendance.html', now=now)
 
-@tech.route('/api/get_attendance_data')
+@non_tech.route('/api/get_attendance_data')
 def get_attendance_data():
     """
     API endpoint to get attendance data from all machines
@@ -66,22 +66,22 @@ def get_attendance_data():
     try:
         # Get data from all registered machines
         machines = ZKMachine.query.all()
-        logger.info(f"Found {len(machines)} registered machines. at {datetime.now(cairo_tz)}")
+        logger.info(f"Found {len(machines)} registered machines.")
         
         if not machines:
             # If no machines are registered, use the ones from config
-            logger.info(f"No machines registered. Using machines from config. at {datetime.now(cairo_tz)}")
+            logger.info("No machines registered. Using machines from config.")
             for machine_config in Config.ZK_MACHINES:
-                logger.info(f"Fetching data from machine: {machine_config['ip']} at {datetime.now(cairo_tz)}")
+                logger.info(f"Fetching data from machine: {machine_config['ip']}")
                 machine_data = ZKConnector.get_attendance_data(machine_config)
                 if machine_data:
-                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine_config['ip']} at {datetime.now(cairo_tz)}")
+                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine_config['ip']}")
                     ZKConnector.save_attendance_records(machine_data)
                 else:
-                    logger.error(f"Failed to fetch data from machine: {machine_config['ip']} at {datetime.now(cairo_tz)}")
+                    logger.error(f"Failed to fetch data from machine: {machine_config['ip']}")
         else:
             # Use registered machines
-            logger.info(f"Using registered machines. at {datetime.now(cairo_tz)}")
+            logger.info("Using registered machines.")
             for machine in machines:
                 machine_config = {
                     'ip': machine.ip,
@@ -89,17 +89,17 @@ def get_attendance_data():
                     'timeout': 50,
                     'name': machine.name
                 }
-                logger.info(f"Fetching data from machine: {machine.ip} at {datetime.now(cairo_tz)}")
+                logger.info(f"Fetching data from machine: {machine.ip}")
                 machine_data = ZKConnector.get_attendance_data(machine_config)
                 if machine_data:
-                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine.ip} at {datetime.now(cairo_tz)}")
+                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine.ip}")
                     ZKConnector.save_attendance_records(machine_data)
                 else:
-                    logger.error(f"Failed to fetch data from machine: {machine.ip} at {datetime.now(cairo_tz)}")
+                    logger.error(f"Failed to fetch data from machine: {machine.ip}")
         
         # Get combined data
         combined_data = ZKConnector.get_combined_attendance_data()
-        logger.info(f"Combined attendance data: {len(combined_data)} records. at {datetime.now(cairo_tz)}")
+        logger.info(f"Combined attendance data: {len(combined_data)} records.")
         
         return jsonify({
             'status': 'success',
@@ -107,14 +107,14 @@ def get_attendance_data():
             'count': len(combined_data)
         })
     except Exception as e:
-        logger.error(f"Error in get_attendance_data: {e} at {datetime.now(cairo_tz)}")
+        logger.error(f"Error in get_attendance_data: {e}")
         return jsonify({
             'status': 'error',
             'message': str(e)
         }), 500
 
 
-@tech.route('/api/employees')
+@non_tech.route('/api/employees')
 def get_employees():
     """
     API endpoint to get all employees
@@ -125,7 +125,7 @@ def get_employees():
         'data': [emp.to_dict() for emp in employees]
     })
 
-@tech.route('/employees')
+@non_tech.route('/employees')
 def employees():
     """
     View employees
@@ -134,7 +134,7 @@ def employees():
     now = datetime.now()
     return render_template('employees.html', now=now, employees=employees)
 
-@tech.route('/employees/add', methods=['GET', 'POST'])
+@non_tech.route('/employees/add', methods=['GET', 'POST'])
 def add_employee():
     """
     Add a new employee
@@ -155,11 +155,11 @@ def add_employee():
         db.session.commit()
         
         flash(f'Employee {name} added successfully!', 'success')
-        return redirect(url_for('tech.employees'))
+        return redirect(url_for('non_tech.employees'))
     now = datetime.now()
     return render_template('add_employee.html', now=now)
 
-@tech.route('/api/associate_records', methods=['POST'])
+@non_tech.route('/api/associate_records', methods=['POST'])
 def associate_records():
     """
     Associate unmatched attendance records with employees
@@ -198,7 +198,7 @@ def associate_records():
     })
 
 
-@tech.route('/machines/edit/<int:machine_id>', methods=['GET', 'POST'])
+@non_tech.route('/machines/edit/<int:machine_id>', methods=['GET', 'POST'])
 def edit_machine(machine_id):
     now = datetime.now()
     machine = ZKMachine.query.get_or_404(machine_id)
@@ -208,18 +208,18 @@ def edit_machine(machine_id):
         machine.port = int(request.form.get('port', 4370))
         db.session.commit()
         flash(f'Machine {machine.name} updated successfully!', 'success')
-        return redirect(url_for('tech.list_machines'))
+        return redirect(url_for('non_tech.list_machines'))
     return render_template('edit_machine.html', machine=machine, now=now)
 
-@tech.route('/machines/delete/<int:machine_id>', methods=['POST'])
+@non_tech.route('/machines/delete/<int:machine_id>', methods=['POST'])
 def delete_machine(machine_id):
     machine = ZKMachine.query.get_or_404(machine_id)
     db.session.delete(machine)
     db.session.commit()
     flash(f'Machine {machine.name} deleted successfully!', 'success')
-    return redirect(url_for('tech.list_machines'))
+    return redirect(url_for('non_tech.list_machines'))
 
-@tech.route('/machines/test/<int:machine_id>', methods=['POST'])
+@non_tech.route('/machines/test/<int:machine_id>', methods=['POST'])
 def test_machine(machine_id):
     machine = ZKMachine.query.get_or_404(machine_id)
     conn = ZKConnector.connect_to_machine(machine.ip, machine.port)
@@ -230,7 +230,7 @@ def test_machine(machine_id):
         return jsonify({'status': 'error', 'message': 'Failed to connect to machine.'}), 500
     
 
-@tech.route('/machines/toggle_status/<int:machine_id>', methods=['POST'])
+@non_tech.route('/machines/toggle_status/<int:machine_id>', methods=['POST'])
 def toggle_machine_status(machine_id):
     machine = ZKMachine.query.get_or_404(machine_id)
     machine.status = 'active' if machine.status == 'inactive' else 'inactive'
@@ -238,7 +238,7 @@ def toggle_machine_status(machine_id):
     return jsonify({'status': 'success', 'message': f'Machine {machine.name} status updated to {machine.status}.'})
 
 
-@tech.route('/employees/edit/<int:employee_id>', methods=['GET', 'POST'])
+@non_tech.route('/employees/edit/<int:employee_id>', methods=['GET', 'POST'])
 def edit_employee(employee_id):
     now = datetime.now()
     employee = Employee.query.get_or_404(employee_id)
@@ -250,19 +250,19 @@ def edit_employee(employee_id):
         employee.branch = request.form.get('branch')
         db.session.commit()
         flash(f'Employee {employee.name} updated successfully!', 'success')
-        return redirect(url_for('tech.employees'))
+        return redirect(url_for('non_tech.employees'))
     return render_template('edit_employee.html', employee=employee, now=now)
 
 
-@tech.route('/employees/delete/<int:employee_id>', methods=['POST'])
+@non_tech.route('/employees/delete/<int:employee_id>', methods=['POST'])
 def delete_employee(employee_id):
     employee = Employee.query.get_or_404(employee_id)
     db.session.delete(employee)
     db.session.commit()
     flash(f'Employee {employee.name} deleted successfully!', 'success')
-    return redirect(url_for('tech.employees'))
+    return redirect(url_for('non_tech.employees'))
 
-@tech.route('/api/import_employees', methods=['POST'])
+@non_tech.route('/api/import_employees', methods=['POST'])
 def import_employees():
     if 'file' not in request.files:
         return jsonify({'status': 'error', 'message': 'No file provided'}), 400
@@ -322,7 +322,7 @@ def import_employees():
         }), 500
 
 
-@tech.route('/api/export_attendance', methods=['GET'])
+@non_tech.route('/api/export_attendance', methods=['GET'])
 def export_attendance():
     attendance_records = AttendanceRecord.query.all()
     data = [{
@@ -338,7 +338,7 @@ def export_attendance():
     return send_file(output, as_attachment=True, download_name='attendance_records.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 
-@tech.route('/api/export_employees', methods=['GET'])
+@non_tech.route('/api/export_employees', methods=['GET'])
 def export_employees():
     try:
         employees = Employee.query.all()
@@ -361,13 +361,13 @@ def export_employees():
         }), 500
 
 
-@tech.route('/calculated_attendance')
+@non_tech.route('/calculated_attendance')
 def calculated_attendance():
     now = datetime.now()
     return render_template('calculated_attendance.html', now=now)
 
 
-@tech.route('/api/calculate_attendance', methods=['POST'])
+@non_tech.route('/api/calculate_attendance', methods=['POST'])
 def calculate_attendance():
     start_date = request.json.get('start_date')
     end_date = request.json.get('end_date')
@@ -446,7 +446,7 @@ def calculate_attendance():
     return jsonify({'status': 'success', 'data': calculated_data})
 
 
-@tech.route('/api/export_calculated_attendance', methods=['GET'])
+@non_tech.route('/api/export_calculated_attendance', methods=['GET'])
 def export_calculated_attendance():
     try:
         # Fetch query parameters
@@ -542,12 +542,12 @@ def export_calculated_attendance():
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
     except Exception as e:
-        logger.error(f"Error exporting calculated attendance: {e} at {datetime.now(cairo_tz)}")
+        logger.error(f"Error exporting calculated attendance: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
 
-@tech.route('/api/import_attendance', methods=['POST'])
+@non_tech.route('/api/import_attendance', methods=['POST'])
 def import_attendance():
     if 'file' not in request.files:
         return jsonify({'status': 'error', 'message': 'No file provided'}), 400
@@ -605,7 +605,7 @@ def import_attendance():
         }), 500
     
 
-@tech.route('/api/get_employee_data', methods=['GET'])
+@non_tech.route('/api/get_employee_data', methods=['GET'])
 def get_employee_data():
     try:
         employees = Employee.query.all()

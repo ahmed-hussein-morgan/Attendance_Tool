@@ -1,7 +1,7 @@
 # type: ignore
 from zk import ZK, const
 from datetime import datetime
-from ..models import Employee, AttendanceRecord, ZKMachine, db
+from .models import Employee, AttendanceRecord, ZKMachine, db
 import logging
 from pytz import timezone
 
