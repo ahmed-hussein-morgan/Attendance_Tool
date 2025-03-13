@@ -1,7 +1,7 @@
 # type: ignore
 from app import Create_app, db
 from flask_migrate import Migrate
-from flask import Flask
+
 
 app = Create_app('development')
 
