@@ -342,6 +342,7 @@ def import_employees():
 def export_attendance():
     attendance_records = AttendanceRecord.query.all()
     data = [{
+        'zk_user_id': record.zk_user_id,
         'employee_id': record.employee_id,
         'name': record.employee.name if record.employee else 'N/A',
         'timestamp': record.timestamp.strftime('%Y-%m-%d %H:%M:%S'),

@@ -29,6 +29,7 @@
             <table id="attendanceTable" class="table table-striped table-bordered">
                 <thead>
                     <tr>
+                        <th>ZK Employee ID</th>
                         <th>Employee ID</th>
                         <th>Name</th>
                         <th>Department</th>
@@ -82,6 +83,7 @@
         const attendanceTable = $('#attendanceTable').DataTable({
             order: [[4, 'desc']],  // Sort by timestamp by default
             columns: [
+                { data: 'zk_user_id'},
                 { data: 'employee_id' },
                 { data: 'employee_name' },
                 { data: 'employee_department' },
