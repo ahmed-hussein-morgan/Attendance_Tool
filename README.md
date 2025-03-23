@@ -87,5 +87,5 @@ Licensed under the **MIT License** – feel free to tweak and improve!
 Want to make it even better? Fork the repo, submit a PR, or drop me a message!
 
 ## 📬 Need Help?
-Drop an email at [your-email@example.com](mailto:your-email@example.com) – let's chat!
+Drop an email at [ahmed.h.morgan2050@gmail.com](mailto:ahmed.h.morgan2050@gmail.com) – let's chat!
 
