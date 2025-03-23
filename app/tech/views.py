@@ -144,6 +144,8 @@ def add_employee():
         name = request.form.get('name')
         department = request.form.get('department')
         title = request.form.get('title')
+
+        logger.info(f"Adding new employee: {employee_id}, {name}")
         
         employee = Employee(
             employee_id=employee_id,
@@ -153,6 +155,20 @@ def add_employee():
         )
         db.session.add(employee)
         db.session.commit()
+
+
+        # Check if there are attendance records with this zk_user_id
+        records = AttendanceRecord.query.filter_by(zk_user_id=employee_id).all()
+        if records:
+
+            logger.info(f"Found {len(records)} records to associate with employee {employee_id}")
+
+
+            # Associate the records with the new employee - fix Issue number #01
+            for record in records:
+                record.employee_id = employee_id
+            db.session.commit()
+
         
         flash(f'Employee {name} added successfully!', 'success')
         return redirect(url_for('tech.employees'))
