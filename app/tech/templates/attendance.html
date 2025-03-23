@@ -89,11 +89,12 @@
                 { data: 'employee_department' },
                 { data: 'employee_title' },
                 { 
-                    data: 'timestamp',
-                    render: function(data) {
-                        const date = new Date(data);
-                        return date.toLocaleString('en-US', { timeZone: 'Africa/Cairo' });
-                    }
+                    data: 'timestamp'
+                    // data: 'timestamp',
+                    // render: function(data) {
+                    //     const date = new Date(data);
+                    //     return date.toLocaleString('en-US', { timeZone: 'Africa/Cairo' });
+                    // }
                 },
                 { data: 'machine_name' },
                 {
