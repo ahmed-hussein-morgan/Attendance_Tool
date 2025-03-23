@@ -11,3 +11,7 @@ migrate = Migrate(app, db)
 def make_shell_context():
     from app.models import Machine, Attendance, Employee, UserLogin  # Import models here
     return dict(db=db, Machine=Machine, Attendance=Attendance, Employee=Employee, UserLogin=UserLogin)
+
+
+if __name__ == '__main__':
+    app.run(host='192.168.40.1', port=5000, debug=True)
