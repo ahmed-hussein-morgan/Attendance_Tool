@@ -72,10 +72,10 @@ def get_attendance_data():
             # If no machines are registered, use the ones from config
             logger.info("No machines registered. Using machines from config.")
             for machine_config in Config.ZK_MACHINES:
-                logger.info(f"Fetching data from machine: {machine_config['ip']}")
+                logger.info(f"Fetching data from machine: {machine_config['ip']} at {datetime.now(cairo_tz)}")
                 machine_data = ZKConnector.get_attendance_data(machine_config)
                 if machine_data:
-                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine_config['ip']}")
+                    logger.info(f"Fetched {len(machine_data['attendance'])} records from machine: {machine_config['ip']} at {datetime.now(cairo_tz)}")
                     ZKConnector.save_attendance_records(machine_data)
                 else:
                     logger.error(f"Failed to fetch data from machine: {machine_config['ip']}")

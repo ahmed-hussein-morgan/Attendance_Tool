@@ -131,27 +131,27 @@
             window.location.href = exportUrl;
 
             // Send a POST request with JSON data
-            // $.ajax({
-            //     url: '/api/export_calculated_attendance',
-            //     method: 'POST',
-            //     contentType: 'application/json',
-            //     data: JSON.stringify({
-            //         start_date: startDate,
-            //         end_date: endDate,
-            //         employee_id: employeeId
-            //     }),
-            //     success: function(response) {
-            //         if (response.status === 'success') {
-            //             // Trigger file download
-            //             window.location.href = response.download_url;
-            //         } else {
-            //             alert('Error: ' + response.message);
-            //         }
-            //     },
-            //     error: function(xhr, status, error) {
-            //         alert('Failed to export attendance: ' + error);
-            //     }
-            // });
+            $.ajax({
+                url: '/api/export_calculated_attendance',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    start_date: startDate,
+                    end_date: endDate,
+                    employee_id: employeeId
+                }),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Trigger file download
+                        window.location.href = response.download_url;
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Failed to export attendance: ' + error);
+                }
+            });
         });
     });
 </script>
