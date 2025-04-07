@@ -463,7 +463,7 @@ def calculate_attendance():
     return jsonify({'status': 'success', 'data': calculated_data})
 
 
-@tech.route('/api/export_calculated_attendance', methods=['GET'])
+@tech.route('/api/export_calculated_attendance', methods=['GET', 'POST'])
 def export_calculated_attendance():
     try:
         # Fetch query parameters
